@@ -1,12 +1,12 @@
 import axios, { AxiosPromise } from 'axios';
 
-interface Syncable {
+interface HasId {
   id?: number;
 }
 
-export class Sync<T extends Syncable> {
+export class Sync<T extends HasId> {
   constructor(public rootUrl: string) {};
-  
+
   fetch(id: number): AxiosPromise {
     return axios.get(`${this.rootUrl}/${id}`);
   }
@@ -14,7 +14,7 @@ export class Sync<T extends Syncable> {
   save(data: T): AxiosPromise {
     const { id } = data;
   
-    if (id) {
+    if (typeof id === 'number') {
       return axios.put(`${this.rootUrl}/${id}`, data);
     } else {
       return axios.post(`${this.rootUrl}`, data);
