@@ -1,11 +1,9 @@
+import axios, { AxiosResponse } from 'axios';
+
 type Callback = () => void;
 
 export interface UserProps {
-  name: string;
-  age: number;
-}
-
-export interface UserUpdateProps {
+  id?: number;
   name?: string;
   age?: number;
 }
@@ -13,7 +11,6 @@ export interface UserUpdateProps {
 export interface Events {
   [key: string]: Callback[]
 }
-
 
 export class User {
   events: Events = {};
@@ -24,7 +21,7 @@ export class User {
     return this.data[prop];
   }
 
-  set(update: UserUpdateProps): void {
+  set(update: UserProps): void {
     Object.assign(this.data, update);
   }
 
@@ -43,7 +40,11 @@ export class User {
     handlers.forEach((cb: Callback) => cb());
   }
 
-  fetch(): Promise {
-    
+  fetch(): void {
+    axios.get(`http://localhost:3000/users/${this.get('id')}`)
+      .then((res: AxiosResponse): void => {
+        this.set(res.data);
+      })
+      .catch((err: Error) => console.log)
   }
 }
