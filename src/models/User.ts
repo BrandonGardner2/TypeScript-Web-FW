@@ -32,7 +32,7 @@ export class User {
 
   set(update: UserProps): void {
     this.attributes.set(update);
-    this.events.trigger('change');
+    this.trigger('change');
   }
 
   fetch(): void {
@@ -46,6 +46,16 @@ export class User {
       .then((res: AxiosResponse): void => {
         const { data } = res;
         this.set(data);
+      })
+      .catch((err: Error) => console.log(err));
+  }
+
+  save(): void {
+    const attrs = this.attributes.getAll();
+
+    this.sync.save(attrs)
+      .then((res: AxiosResponse): void => {
+        this.trigger('save');
       })
       .catch((err: Error) => console.log(err));
   }
