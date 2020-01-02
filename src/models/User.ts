@@ -42,4 +42,8 @@ export class User {
 
     handlers.forEach((cb: Callback) => cb());
   }
+
+  fetch(): Promise {
+    
+  }
 }
