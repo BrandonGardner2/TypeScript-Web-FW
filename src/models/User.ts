@@ -1,7 +1,3 @@
-import { Attributes } from './Attributes';
-import { Sync } from './Sync';
-import { Eventing } from './Eventing';
-import { AxiosResponse } from 'axios';
 import { Model } from './Model';
 
 export interface UserProps {
@@ -10,60 +6,6 @@ export interface UserProps {
   age?: number;
 }
 
-export class User extends Model {
-  private events: Eventing = new Eventing();
-  private sync: Sync<UserProps> = new Sync<UserProps>(`https://localhost:3000`);
-  private attributes: Attributes<UserProps>;
+export class User extends Model<UserProps> {
   
-  constructor(attrs: UserProps) {
-    super();
-    
-    this.attributes = new Attributes<UserProps>(attrs);
-  };
-
-  get on() {
-    return this.events.on;
-  }
-
-  get trigger() {
-    return this.events.trigger;
-  }
-
-  get get() {
-    return this.attributes.get;
-  }
-
-  get data(): UserProps {
-    return this.attributes.getAll();
-  }
-
-  set(update: UserProps): void {
-    this.attributes.set(update);
-    this.trigger('change');
-  }
-
-  fetch(): void {
-    const id = this.get('id');
-
-    if (typeof id !== 'number') {
-      throw new Error('Cannot fetch without an id.');
-    }
-
-    this.sync.fetch(id)
-      .then((res: AxiosResponse): void => {
-        const { data } = res;
-        this.set(data);
-      })
-      .catch((err: Error) => console.log(err));
-  }
-
-  save(): void {
-    const attrs = this.attributes.getAll();
-
-    this.sync.save(attrs)
-      .then((res: AxiosResponse): void => {
-        this.trigger('save');
-      })
-      .catch((err: Error) => console.log(err));
-  }
 }
