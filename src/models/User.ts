@@ -2,6 +2,7 @@ import { Attributes } from './Attributes';
 import { Sync } from './Sync';
 import { Eventing } from './Eventing';
 import { AxiosResponse } from 'axios';
+import { Model } from './Model';
 
 export interface UserProps {
   id?: number;
@@ -9,12 +10,14 @@ export interface UserProps {
   age?: number;
 }
 
-export class User {
-  public events: Eventing = new Eventing();
-  public sync: Sync<UserProps> = new Sync<UserProps>(`https://localhost:3000`);
-  public attributes: Attributes<UserProps>;
+export class User extends Model {
+  private events: Eventing = new Eventing();
+  private sync: Sync<UserProps> = new Sync<UserProps>(`https://localhost:3000`);
+  private attributes: Attributes<UserProps>;
   
   constructor(attrs: UserProps) {
+    super();
+    
     this.attributes = new Attributes<UserProps>(attrs);
   };
 
@@ -28,6 +31,10 @@ export class User {
 
   get get() {
     return this.attributes.get;
+  }
+
+  get data(): UserProps {
+    return this.attributes.getAll();
   }
 
   set(update: UserProps): void {
