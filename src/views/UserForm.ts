@@ -1,9 +1,11 @@
+import { User } from './../models/User';
+
 interface EventMap {
   [key: string]: () => void
 }
 
 export class UserForm {
-  constructor (public parent: Element) {};
+  constructor (public parent: Element, public model: User) {};
 
   eventsMap(): EventMap {
     return {
@@ -19,6 +21,8 @@ export class UserForm {
     return `
       <div>
         <h1>User Form</h1>
+        <div>User Name: ${this.model.get('name')}</div>
+        <div>User Age: ${this.model.get('age')}</div>
         <input />
         <button>Click Me</button>
       </div>
@@ -41,6 +45,7 @@ export class UserForm {
   render() {
     const templateElement = document.createElement('template');
     templateElement.innerHTML = this.template();
+    this.bindEvents(templateElement.content);
     this.parent.append(templateElement.content);
   }
 }
