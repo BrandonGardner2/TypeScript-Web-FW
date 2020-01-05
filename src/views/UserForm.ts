@@ -5,12 +5,22 @@ interface EventMap {
 }
 
 export class UserForm {
-  constructor (public parent: Element, public model: User) {};
+  constructor (public parent: Element, public model: User) {
+    this.bindModel();
+  };
+
+  bindModel(): void {
+    this.model.on('change', this.render);
+  }
 
   eventsMap(): EventMap {
     return {
-      'click:button': this.onButtonClick 
+      'click:.set-age': this.onSetAgeClick,
     };
+  }
+
+  onSetAgeClick = (): void => {
+    this.model.setRandomAge();
   }
 
   onButtonClick(): void {
@@ -25,6 +35,7 @@ export class UserForm {
         <div>User Age: ${this.model.get('age')}</div>
         <input />
         <button>Click Me</button>
+        <button class="set-age">Set Random Age</button>
       </div>
     `;
   }
@@ -43,6 +54,8 @@ export class UserForm {
   }
 
   render() {
+    this.parent.innerHTML = '';
+
     const templateElement = document.createElement('template');
     templateElement.innerHTML = this.template();
     this.bindEvents(templateElement.content);
