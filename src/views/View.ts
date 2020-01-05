@@ -1,11 +1,7 @@
 import { EventMap } from './UserForm';
-import { Callback } from './../models/Eventing';
+import { Model } from '../models/Model';
 
-interface Renderable {
-  on(eventName: string, callback: Callback): void;
-}
-
-export abstract class View<T extends Renderable> {
+export abstract class View<T extends Model<K>, K> {
   constructor (public parent: Element, public model: T) {
     this.bindModel();
   };

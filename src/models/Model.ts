@@ -16,8 +16,8 @@ export interface Events {
   events: {
     [key: string]: Callback[]
   };
-  on(eventName: string, callback: Callback);
-  trigger(eventName: string);
+  on(eventName: string, callback: Callback): void;
+  trigger(eventName: string): void;
 }
 
 interface HasId {

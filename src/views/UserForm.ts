@@ -1,11 +1,11 @@
-import { User } from './../models/User';
+import { User, UserProps } from './../models/User';
 import { View } from './View';
 
 export interface EventMap {
   [key: string]: () => void
 }
 
-export class UserForm extends View<User> {
+export class UserForm extends View<User, UserProps> {
   eventsMap(): EventMap {
     return {
       'click:.set-age': this.onSetAgeClick,
